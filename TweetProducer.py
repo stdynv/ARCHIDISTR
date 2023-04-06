@@ -11,13 +11,13 @@ findspark.init()
 
 # Configuration de Kafka
 bootstrap_servers = ['broker:29092']
-topicName = 'tge'
+topicName = 'final'
 
 # Configuration de la recherche Twitter
 search_terms = ['#btc', '#XRP', '#eth','#DOT']
 query = ' OR '.join(search_terms) + ' lang:en'
 maxTweets = 10
-timedate=datetime.now() + timedelta(seconds=30)
+timedate=datetime.now() + timedelta(seconds=7200)
 
 # Connexion au producteur Kafka
 producer = KafkaProducer(bootstrap_servers=bootstrap_servers, value_serializer=lambda x: json.dumps(x).encode('utf-8'))
@@ -31,7 +31,7 @@ for tweet in enumerate(sntwitter.TwitterSearchScraper(query).get_items()):
     producer.send(topicName, value=tweet_dict)
     print(tweet_dict)
     print(datetime.now())
-    time.sleep(1) # Pause de 1 seconde pour éviter de spammer l'API Twitter
+    time.sleep(5) # Pause de 1 seconde pour éviter de spammer l'API Twitter
 
     
 producer.flush()
