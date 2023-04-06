@@ -60,14 +60,6 @@ You can then test the python script "streamToKafkaProducerExample.py" locally, o
 
 It should produce four time the message "Nouveaux messages" into the topic "Quickstart"
 
-### Spark/Kafka
-
-The correct command to start the script "spark_kafka.py" should be 
-
-`spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0 spark_kafka.py`
-
-Still investigating the best way to use this.
-
 ### commande pour lancer le producer et consumer avec spark submit
 spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0,org.mongodb.spark:mongo-spark-connector_2.12:3.0.1 /workspace/KafkaProducer_spark.py & spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0,org.mongodb.spark:mongo-spark-connector_2.12:3.0.0 /workspace/KafkaConsumer_spark.py
 
