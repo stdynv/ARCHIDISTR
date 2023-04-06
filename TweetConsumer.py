@@ -23,7 +23,7 @@ spark.sparkContext.setLogLevel("WARN")
 
 # Configuration de Kafka
 bootstrap_servers = ['broker:29092']
-topicName = 'tge'
+topicName = 'final'
 
 # Configuration du consommateur Kafka
 df = spark.readStream \
@@ -44,7 +44,7 @@ schema = StructType([
 # Connexion à MongoDB Atlas
 client = MongoClient("mongodb+srv://Stinson:Stinson@stinson.rcfzhzz.mongodb.net/?retryWrites=true&w=majority")
 db = client.test
-db = client["Archi_dist"]
+db = client["Archi_distri"]
 collection = db["Tweets"]
 
 # Traitement des tweets
@@ -58,7 +58,7 @@ def process_tweet(tweet):
     clean_tweet = re.sub(r'\n', ' ', clean_tweet)  # Replace newlines with spaces
     clean_tweet = re.sub(r'\s+', ' ', clean_tweet)  # Remove extra spaces
     tweet['Text_traité'] = clean_tweet.strip()  # Remove leading/trailing spaces
-
+    print(tweet['Text_traité'])
 
 # Transformation des données en DataFrame structuré
 df_tweets = df.select(from_json(col("value").cast("string"), schema).alias("tweet"))
@@ -68,11 +68,11 @@ query = df_tweets.writeStream \
     .foreach(process_tweet) \
     .option("forceDeleteTempCheckpointLocation", "true")\
     .option('spark.mongodb.connection.uri', 'MONGODB CONNECTION HERE')\
-    .option('spark.mongodb.database', 'archi_dist')\
+    .option('spark.mongodb.database', 'archi_distri')\
     .option('spark.mongodb.collection', 'tweets')\
     .option("checkpointLocation", "checkpoint") \
     .outputMode("append") \
-    .foreachBatch(lambda batch_df, batch_id: batch_df.write.format("mongo").mode("append").option("uri", "mongodb+srv://Stinson:Stinson@stinson.rcfzhzz.mongodb.net/Archi_dist.Tweets").save()) \
+    .foreachBatch(lambda batch_df, batch_id: batch_df.write.format("mongo").mode("append").option("uri", "mongodb+srv://Stinson:Stinson@stinson.rcfzhzz.mongodb.net/Archi_distri.Tweets").save()) \
     .start()
 
 query.awaitTermination()
