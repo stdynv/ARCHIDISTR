@@ -11,33 +11,31 @@
 ### Outils
 
 - Trello (gestion de projet) : https://trello.com/invite/b/EuYMDhT2/ATTI44375d96b82a0c5a0bcf8aca40e7dd88C6661CD2/architecture-distribuee 
-- Github (répot) : https://github.com/Voldlov/architecture-distribuee.git 
-- Python (langage)
-- Docker
-- Spark
-- Kafka
-
-## Consignes
-
-
+- Github (dépôt) : https://github.com/Voldlov/architecture-distribuee.git 
+- Langage : Python
+- Contenneur : Docker
+- Architecture distribuée et streaming : Spark & kafka
+- Visualisation : Grafana
 
 ## Notre sujet
 
-### Travail préliminaire
+Nous sommes des futurs Data Engineer, dans le cadre de la fin du module "Architecture distribuée", lors de notre première année de Master chez Paris Ynov campus nous avons décidé de prendre comme sujet les cryptomonaies par rapport aux twittes. 
 
-Contexte métier, objectif et sources de données
-Choisir les technologies 
-
+Notre objectif est de voir et comprendre l'impacte de ce réseau social sur la valeur des diverses monaies. 
 
 ## Utiliser les fichiers
 
-Use docker compose to start the containers
+### Lancer docker
 
-`docker compose up -d`
+Utiliser la commande suivante pour lancer le Docker File (il est normalement lancé avec le Docker Compose, donc inutile de le faire)
 
+`docker build -t archi_distribuee ./docker `
 
-The docker compose file create and use a spark master, two workers, one jupyter notebook with spark and one kafka container.
-Additionally a zookeeper container is present as a kafka container, ignore that.
+Utiliser la commande suivante pour lancer le Docker Compose, le "-d" permet de le lancer en fond.
+
+`docker-compose -f ./docker/docker-compose.yml up -d`
+
+Le fichier Docker Compose créer et utilise un Master Spark, deux workers, un jupyer notebook avec des contenneurs spark et kafka. Il y a aussi présent Zookeeper. 
 
 ### Kafka
 
@@ -60,7 +58,24 @@ You can then test the python script "streamToKafkaProducerExample.py" locally, o
 
 It should produce four time the message "Nouveaux messages" into the topic "Quickstart"
 
-### commande pour lancer le producer et consumer avec spark submit
-spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0,org.mongodb.spark:mongo-spark-connector_2.12:3.0.1 /workspace/KafkaProducer_spark.py & spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0,org.mongodb.spark:mongo-spark-connector_2.12:3.0.0 /workspace/KafkaConsumer_spark.py
+### Spark/Kafka
 
-spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0,org.mongodb.spark:mongo-spark-connector_2.12:3.0.1 /workspace/CryptoProducer.py & spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0,org.mongodb.spark:mongo-spark-connector_2.12:3.0.0 /workspace/CryptoConsumer.py
+La commande pour démarrer le script "spark_kafka.py"
+
+`spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0 spark_kafka.py`
+
+### Grafana / mongoDB
+
+Accéder à Grafana :
+
+`http://localhost:3001/login`
+
+- login : "admin"
+- mot de passe : "admin"
+
+Lien vers mongoDB : mongodb+srv://Stinson:Stinson@stinson.rcfzhzz.mongodb.net/?retryWrites=true&w=majority 
+
+pour installer le plugin mongodb à grafana (plus d'actualité) :
+
+1. utiliser le dossier dans visualisation portant le nom "mongodb-grafana".
+2. le mettre dans le fihcier plugins de grafana avec cette commande : `docker cp mongodb-grafana 9f6c6b7a71d2:/var/lib/grafana/plugins`
